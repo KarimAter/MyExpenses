@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/transactionDetailIv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/heart_outline"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/transactionDetailMainCatTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="104dp"
+        android:text="MainCategory"
+        app:layout_constraintEnd_toStartOf="@+id/transactionDetailCatTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionDetailIv" />
+
+    <TextView
+        android:id="@+id/transactionDetailCatTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CategoryName"
+        app:layout_constraintEnd_toStartOf="@+id/transactionDetailExpTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/transactionDetailMainCatTv"
+        app:layout_constraintTop_toTopOf="@+id/transactionDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/transactionDetailExpTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="TransactionName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/transactionDetailCatTv"
+        app:layout_constraintTop_toTopOf="@+id/transactionDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/transactionDetailCostTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="224dp"
+        android:text="Cost"
+        app:layout_constraintStart_toStartOf="@+id/transactionDetailMainCatTv"
+        app:layout_constraintTop_toBottomOf="@+id/transactionDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/transactionDayTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Day"
+        app:layout_constraintEnd_toEndOf="@+id/transactionDetailCatTv"
+        app:layout_constraintStart_toStartOf="@+id/transactionDetailCatTv"
+        app:layout_constraintTop_toTopOf="@+id/transactionDetailCostTv" />
+
+    <TextView
+        android:id="@+id/transactionTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        app:layout_constraintEnd_toEndOf="@+id/transactionDetailExpTv"
+        app:layout_constraintTop_toTopOf="@+id/transactionDetailCostTv" />
+
+    <Button
+        android:id="@+id/transactionDetailEditBu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

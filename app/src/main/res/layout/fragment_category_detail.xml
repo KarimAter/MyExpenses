@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/categoryDetailIv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/heart_outline"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/categoryDetailMainCatTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="104dp"
+        android:text="MainCategory"
+        app:layout_constraintEnd_toStartOf="@+id/categoryDetailCatTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryDetailIv" />
+
+    <TextView
+        android:id="@+id/categoryDetailCatTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CategoryName"
+        app:layout_constraintEnd_toStartOf="@+id/categoryDetailExpTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/categoryDetailMainCatTv"
+        app:layout_constraintTop_toTopOf="@+id/categoryDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/categoryDetailExpTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="ExpenseName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/categoryDetailCatTv"
+        app:layout_constraintTop_toTopOf="@+id/categoryDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/categoryDetailCostTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="224dp"
+        android:text="Cost"
+        app:layout_constraintStart_toStartOf="@+id/categoryDetailMainCatTv"
+        app:layout_constraintTop_toBottomOf="@+id/categoryDetailMainCatTv" />
+
+    <TextView
+        android:id="@+id/categoryDetailCountTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Count"
+        app:layout_constraintEnd_toEndOf="@+id/categoryDetailCatTv"
+        app:layout_constraintStart_toStartOf="@+id/categoryDetailCatTv"
+        app:layout_constraintTop_toTopOf="@+id/categoryDetailCostTv" />
+
+    <TextView
+        android:id="@+id/categoryDetailLimitTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limit"
+        app:layout_constraintEnd_toEndOf="@+id/categoryDetailExpTv"
+        app:layout_constraintTop_toTopOf="@+id/categoryDetailCostTv" />
+
+    <Button
+        android:id="@+id/categoryDetailEditBu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

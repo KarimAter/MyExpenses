@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "808174427416",
+    "firebase_url": "https://my-expenses-6ce81.firebaseio.com",
+    "project_id": "my-expenses-6ce81",
+    "storage_bucket": "my-expenses-6ce81.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808174427416:android:4c550a19f828a229",
+        "android_client_info": {
+          "package_name": "com.karim.ater.myexpenses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808174427416-gir6o98ji8gsq4k3qnqku2nkhm1cogps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZns8O_NryQ4smn6Cf-c3wy20Bg3i7pqg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

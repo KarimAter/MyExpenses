@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Cloud">
+
+        <Preference
+            android:icon="@drawable/ic_sync_blue_24dp"
+            app:key="sync"
+            app:summary="Sync your data"
+            app:title="Sync" />
+        <Preference
+            android:icon="@drawable/ic_backup_black_24dp"
+            app:key="backup"
+            app:summary="Backup your data"
+            app:title="Back up" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="StorageArray">
+        <item>import</item>
+        <item>export</item>
+
+    </string-array>
+    <string-array name="StorageArrayValues">
+        <item>restore</item>
+        <item>backup</item>
+
+    </string-array>
+
+
+</resources>
