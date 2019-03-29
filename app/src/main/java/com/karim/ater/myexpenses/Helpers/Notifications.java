@@ -1,5 +1,6 @@
 package com.karim.ater.myexpenses.Helpers;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,12 +10,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
+import com.karim.ater.myexpenses.Fragments.AlarmReceiver;
 import com.karim.ater.myexpenses.Fragments.MainActivity;
 import com.karim.ater.myexpenses.R;
+
+import java.util.Calendar;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC;
 
@@ -26,6 +31,22 @@ public class Notifications {
     // Importance applicable to all the notifications in this Channel
     private Context context;
     private NotificationCompat.Builder notificationCompatBuilder;
+
+    public static void setNotificationAlarm(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.MINUTE, 20);
+        calendar.set(Calendar.SECOND, 0);
+        Intent notificationIntent = new Intent(context, AlarmReceiver.class);
+        notificationIntent.putExtra("AlarmType", "Notification");
+        PendingIntent pendingNotifIntent = PendingIntent.getBroadcast(context,
+                0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_HALF_HOUR, pendingNotifIntent);
+        }
+    }
 
     public Notifications(Context context) {
         this.context = context;

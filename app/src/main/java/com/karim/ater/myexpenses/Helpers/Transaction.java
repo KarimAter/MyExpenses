@@ -1,12 +1,47 @@
 package com.karim.ater.myexpenses.Helpers;
 
 import android.app.Activity;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 public class Transaction extends CategoryItem {
     private String transactionDay, transactionTime, transactionDate, transactionNote;
     private int transactionId;
 
     public Transaction() {
+    }
+
+
+    public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+        out.writeString(transactionDay);
+        out.writeString(transactionTime);
+        out.writeString(transactionDate);
+        out.writeString(transactionNote);
+        out.writeInt(transactionId);
+    }
+
+    private Transaction(Parcel in) {
+        super(in);
+        transactionDay = in.readString();
+        transactionTime = in.readString();
+        transactionDate = in.readString();
+        transactionNote = in.readString();
+        transactionId = in.readInt();
     }
 
     public Transaction(CategoryItem categoryItem) {

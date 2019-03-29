@@ -1,23 +1,22 @@
 package com.karim.ater.myexpenses;
 
-import android.app.AlarmManager;
+
 import android.app.Application;
-import android.app.PendingIntent;
+
 import android.content.Context;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.util.Log;
 
-import com.karim.ater.myexpenses.Fragments.AlarmReceiver;
 import com.karim.ater.myexpenses.Fragments.Refresher;
 import com.karim.ater.myexpenses.Helpers.CategoryItem;
 import com.karim.ater.myexpenses.Helpers.DatabaseConnector;
 import com.karim.ater.myexpenses.Helpers.MyCalendar;
 import com.karim.ater.myexpenses.Helpers.MySharedPrefs;
+import com.karim.ater.myexpenses.Helpers.Notifications;
 import com.karim.ater.myexpenses.Helpers.Transaction;
 import com.karim.ater.myexpenses.Helpers.Utils;
 
@@ -102,24 +101,10 @@ public class AppController extends Application implements Refresher {
     private void createDailyNotification() {
         if (MySharedPrefs.isFirstLaunch(this)) {
             MySharedPrefs.setFirstLaunch(this, false);
-            setRecurringAlarm();
+            Notifications.setNotificationAlarm(context);
         }
     }
 
-    private void setRecurringAlarm() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 1);
-        calendar.set(Calendar.MINUTE, 20);
-        calendar.set(Calendar.SECOND, 0);
-        Intent notIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingNotifIntent = PendingIntent.getBroadcast(this,
-                0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_HALF_HOUR, pendingNotifIntent);
-        }
-    }
 
     public static String getCurrentMonth() {
         return currentMonth;
@@ -145,7 +130,7 @@ public class AppController extends Application implements Refresher {
     // to validate if there is database created or not
     private void databaseValidation() {
         // to check database existence
-        DatabaseConnector databaseConnector = new DatabaseConnector(getApplicationContext());
+        DatabaseConnector databaseConnector = new DatabaseConnector(context);
 
         databaseConnector.createDataBase();
         Log.d(TAG, "HomeOnCreate: Database in valid ");

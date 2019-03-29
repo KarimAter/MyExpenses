@@ -84,7 +84,10 @@ public class HomeActionModeCallBack implements ActionMode.Callback {
                 // to enter the fixed/periodic item with old date
                 CategoryItem categoryItem = AppController.getSelectedItemsInActionMode().get(0);
                 SpecialFragment specialFragment = SpecialFragment.newInstance(categoryItem);
-                specialFragment.show(activity.getFragmentManager(), "Special");
+                ((FragmentActivity) activity).getSupportFragmentManager().
+                        beginTransaction().
+                        addToBackStack(SpecialFragment.class.getSimpleName())
+                        .replace(R.id.frame, specialFragment).commit();
                 mode.finish();
             }
             return true;

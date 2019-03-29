@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 
-public class TransactionEditorFragment extends DialogFragment {
+public class TransactionEditorFragment extends Fragment {
 
     private Transaction transaction, updatedTransaction;
     private View view;
@@ -66,7 +66,7 @@ public class TransactionEditorFragment extends DialogFragment {
         args.putParcelable("Transaction", transaction);
         TransactionEditorFragment fragment = new TransactionEditorFragment();
         fragment.setArguments(args);
-        fragment.setCancelable(true);
+//        fragment.setCancelable(true);
         return fragment;
     }
 
@@ -181,7 +181,7 @@ public class TransactionEditorFragment extends DialogFragment {
                                 transaction.update(activity);
                                 updateTransactionDetailFragment(transaction);
 //                                if (!(parentFragment instanceof TransactionDetailFragment)) {
-                                    ((CalendarStatsFragment) AppController.getCurrentFragment()).onRefresh();
+                                ((CalendarStatsFragment) AppController.getCurrentFragment()).onRefresh();
 //                                }
                             }
                         });
@@ -199,6 +199,7 @@ public class TransactionEditorFragment extends DialogFragment {
     }
 
     private void showPickers() {
+
         final Calendar date = Calendar.getInstance();
         final Calendar currentDate = Calendar.getInstance();
         try {
@@ -220,7 +221,7 @@ public class TransactionEditorFragment extends DialogFragment {
                         transactionDateTv.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date.getTime()));
                     }
                 }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
-
+//Todo: convert this to lamda
             }
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
         datePickerDialog.show();

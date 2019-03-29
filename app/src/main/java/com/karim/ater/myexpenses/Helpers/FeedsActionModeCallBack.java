@@ -50,7 +50,10 @@ public class FeedsActionModeCallBack implements ActionMode.Callback {
                 // launches the category_editor dialog to enter new name/cost/limit
                 Transaction transaction = AppController.getSelectedFeedsInActionMode().get(0);
                 TransactionEditorFragment transactionEditorFragment = TransactionEditorFragment.newInstance(transaction);
-                transactionEditorFragment.show(((FragmentActivity) activity).getSupportFragmentManager(), "Edit");
+                ((FragmentActivity) activity).getSupportFragmentManager().
+                        beginTransaction().
+                        addToBackStack(TransactionEditorFragment.class.getSimpleName())
+                        .replace(R.id.frame, transactionEditorFragment).commit();
 
             }
             actionMode.finish();

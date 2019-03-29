@@ -45,7 +45,7 @@ public class StatsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         if (view == null) {
@@ -84,7 +84,6 @@ public class StatsFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     switch (position) {
                         case 0:
                             fragment = CalendarStatsFragment.newInstance("Feeds");

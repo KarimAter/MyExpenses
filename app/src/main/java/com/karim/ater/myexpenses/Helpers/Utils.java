@@ -1,16 +1,28 @@
 package com.karim.ater.myexpenses.Helpers;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.DatePicker;
+
+import com.karim.ater.myexpenses.Fragments.AlarmReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by Ater on 8/2/2018.
@@ -27,6 +39,40 @@ public class Utils {
     public Utils(Activity activity) {
         this.activity = activity;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static void setRecurringAlarm(Context context, Transaction transaction, Calendar scheduledDate) {
+        transaction.setTransactionDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(scheduledDate.getTime()));
+        int requestCode = Integer.valueOf(transaction.getCategoryId()) * 100;
+
+        Intent automaticIntent = new Intent(context, AlarmReceiver.class);
+
+        byte[] bytes = ParcelableUtil.marshall(transaction);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("Transaction", transaction);
+
+        automaticIntent.putExtra("AlarmType", "Automatic");
+        automaticIntent.putExtra("TransactionByteArray", bytes);
+//        String transDate= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(scheduledDate.getTime());
+//        automaticIntent.putExtra("transDate",transDate);
+//        automaticIntent.putExtra("categoryId", categoryItem.getCategoryId());
+        PendingIntent pendingNotifIntent = PendingIntent.getBroadcast(context,
+                requestCode, automaticIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledDate.getTimeInMillis(),
+                        pendingNotifIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, scheduledDate.getTimeInMillis(),
+                        pendingNotifIntent);
+            }
+            Log.d("AutomaticTransaction", "setRecurringAlarm: Alarm with requsetCode:" + requestCode + " and" +
+                    "categoryId:" + transaction.getCategoryId() +
+                    " and transactionDate: " + transaction.getTransactionDate() + " is fired..");
+        }
+    }
+
 
     // gets the date from datePicker
     public static String gettingDate(DatePicker datePicker) {

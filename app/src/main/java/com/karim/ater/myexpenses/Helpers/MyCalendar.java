@@ -1,13 +1,15 @@
 package com.karim.ater.myexpenses.Helpers;
 
 
+import com.karim.ater.myexpenses.AppController;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class MyCalendar {
-
+    public static SimpleDateFormat databaseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public final static int CALENDAR_FUTURE_DIRECTION = 1;
     public final static int CALENDAR_PAST_DIRECTION = -1;
     boolean directionSwitch;
@@ -20,6 +22,51 @@ public class MyCalendar {
 
     private static Calendar calendar = Calendar.getInstance();
 
+    public static String convertCalendarToString(Calendar calendar, SimpleDateFormat dateFormat) {
+        return dateFormat.format(calendar.getTime());
+    }
+
+    public static Calendar convertStringToCalendar(String calendarString, SimpleDateFormat dateFormat) {
+        Calendar calendar = null;
+        try {
+            calendar = Calendar.getInstance();
+            calendar.setTime(dateFormat.parse(calendarString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calendar;
+    }
+
+    public static String addPeriodToCalendar(String currentDate, String rollIdentifier) {
+        Calendar calendar = convertStringToCalendar(currentDate, databaseDateFormat);
+        switch (rollIdentifier) {
+
+            //Todo: add weekday
+            case "Daily":
+                //Todo: return to Calendar.DATE
+                calendar.add(Calendar.MINUTE, 1);
+                break;
+            case "Monthly":
+                calendar.add(Calendar.MONTH, 1);
+                break;
+            case "Weekly":
+                calendar.add(Calendar.DATE, 7);
+                break;
+            case "Yearly":
+                calendar.add(Calendar.YEAR, 1);
+                break;
+            case "BiWeekly":
+                calendar.add(Calendar.DATE, 14);
+                break;
+            case "1/3 year":
+                calendar.add(Calendar.MONTH, 4);
+                break;
+            case "1/2 year":
+                calendar.add(Calendar.MONTH, 6);
+                break;
+        }
+        return convertCalendarToString(calendar, databaseDateFormat);
+    }
 
     public String showCalendar(CALENDAR_MODE mode) {
 
@@ -27,9 +74,7 @@ public class MyCalendar {
         String calendarOut = null;
         switch (mode) {
 
-            case DAY:
-
-            {
+            case DAY: {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd yyyy");
                 calendarOut = dateFormat.format(calendar.getTime());
             }

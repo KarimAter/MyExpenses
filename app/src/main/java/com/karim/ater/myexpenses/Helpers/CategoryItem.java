@@ -48,34 +48,18 @@ public class CategoryItem implements Parcelable {
         this.icon = icon;
     }
 
-    public CategoryItem(String categoryType, String mainCategory, String categoryName) {
-        this.categoryName = categoryName;
-        this.categoryType = categoryType;
-        this.mainCategory = mainCategory;
+    public CategoryItem(CategoryItem categoryItem) {
+        this.mainCategory = categoryItem.getMainCategory();
+        this.categoryName = categoryItem.getCategoryName();
+        this.categoryType = categoryItem.getCategoryType();
+        this.periodIdentifier = categoryItem.getPeriodIdentifier();
+        this.expenseName = categoryItem.getExpenseName();
+        this.icon = categoryItem.getIcon();
+        this.cost = categoryItem.getCost();
+        this.categoryLimiter = categoryItem.getCategoryLimiter();
+        this.itemLimiter = categoryItem.getItemLimiter();
+        this.favorite = categoryItem.isFavorite();
     }
-
-    // making class parcelable
-    private CategoryItem(Parcel in) {
-        mainCategory = in.readString();
-        categoryName = in.readString();
-        categoryType = in.readString();
-        periodIdentifier = in.readString();
-        expenseName = in.readString();
-        icon = in.readString();
-        cost = in.readFloat();
-    }
-
-    public static final Creator<CategoryItem> CREATOR = new Creator<CategoryItem>() {
-        @Override
-        public CategoryItem createFromParcel(Parcel in) {
-            return new CategoryItem(in);
-        }
-
-        @Override
-        public CategoryItem[] newArray(int size) {
-            return new CategoryItem[size];
-        }
-    };
 
     public CategoryItem(String categoryType, String mainCategory, String categoryName, String periodIdentifier, String expenseName,
                         float cost) {
@@ -91,28 +75,53 @@ public class CategoryItem implements Parcelable {
 
     }
 
-
-    public CategoryItem(CategoryItem categoryItem) {
-        this.mainCategory = categoryItem.getMainCategory();
-        this.categoryName = categoryItem.getCategoryName();
-        this.categoryType = categoryItem.getCategoryType();
-        this.periodIdentifier = categoryItem.getPeriodIdentifier();
-        this.expenseName = categoryItem.getExpenseName();
-        this.icon = categoryItem.getIcon();
-        this.cost = categoryItem.getCost();
-        this.categoryLimiter = categoryItem.getCategoryLimiter();
-        this.itemLimiter = categoryItem.getItemLimiter();
-        this.favorite = categoryItem.isFavorite();
+    public CategoryItem(String categoryType, String mainCategory, String categoryName) {
+        this.categoryName = categoryName;
+        this.categoryType = categoryType;
+        this.mainCategory = mainCategory;
     }
 
+
+    // making class parcelable
+    protected CategoryItem(Parcel in) {
+        categoryId = in.readString();
+        direction = in.readString();
+        mainCategory = in.readString();
+        categoryName = in.readString();
+        categoryType = in.readString();
+        periodIdentifier = in.readString();
+        expenseName = in.readString();
+        icon = in.readString();
+        cost = in.readFloat();
+        categoryLimiter = in.readFloat();
+        itemLimiter = in.readFloat();
+        scheduleType = in.readString();
+        boolean[] bools = {favorite, inSelectedMode, schedule};
+        in.readBooleanArray(bools);
+    }
+
+    public static final Creator<CategoryItem> CREATOR = new Creator<CategoryItem>() {
+        @Override
+        public CategoryItem createFromParcel(Parcel in) {
+            return new CategoryItem(in);
+        }
+
+        @Override
+        public CategoryItem[] newArray(int size) {
+            return new CategoryItem[size];
+        }
+    };
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(categoryId);
+        dest.writeString(direction);
         dest.writeString(mainCategory);
         dest.writeString(categoryName);
         dest.writeString(categoryType);
@@ -120,6 +129,11 @@ public class CategoryItem implements Parcelable {
         dest.writeString(expenseName);
         dest.writeString(icon);
         dest.writeFloat(cost);
+        dest.writeFloat(categoryLimiter);
+        dest.writeFloat(itemLimiter);
+        dest.writeString(scheduleType);
+        boolean[] bools = {favorite, inSelectedMode, schedule};
+        dest.writeBooleanArray(bools);
     }
 
     public void setDirection(String direction) {
