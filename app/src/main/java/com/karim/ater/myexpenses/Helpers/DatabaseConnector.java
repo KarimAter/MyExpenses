@@ -426,7 +426,11 @@ DatabaseConnector extends SQLiteOpenHelper {
     public ArrayList<CategoryItem> getPeriodicSubCategories(String periodIdentifier) {
         ArrayList<CategoryItem> periodicList = new ArrayList<CategoryItem>();
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        String periodicItemsQuery = "select * from 'Categorizer' where PeriodIdentifier Like '" + periodIdentifier + "'";
+        String periodicItemsQuery = "Select * from (" +
+                "select * from 'Categorizer' where PeriodIdentifier Like '" + periodIdentifier + "' ) as firstSet "
+                + " left join " +
+                " ( select * from Scheduler ) as secondSet " +
+                "on firstSet.Id=secondSet.CategoryId";
         Cursor cursor = sqLiteDatabase.rawQuery(periodicItemsQuery, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -441,6 +445,8 @@ DatabaseConnector extends SQLiteOpenHelper {
             periodicCategoryItem.setFavorite(cursor.getString(8).equals("true"));
             periodicCategoryItem.setItemLimiter(cursor.getFloat(10));
             periodicCategoryItem.setIcon(cursor.getString(11));
+            periodicCategoryItem.setScheduleDate(cursor.getString(12));
+            periodicCategoryItem.setScheduleType(cursor.getString(14));
             periodicCategoryItem.setPeriodIdentifier(periodIdentifier);
             periodicList.add(periodicCategoryItem);
             cursor.moveToNext();
@@ -454,8 +460,12 @@ DatabaseConnector extends SQLiteOpenHelper {
     public ArrayList<CategoryItem> searchPeriodicSubCategories(String periodIdentifier, String searchText) {
         ArrayList<CategoryItem> periodicList = new ArrayList<CategoryItem>();
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        String periodicItemsQuery = "select * from 'Categorizer' where PeriodIdentifier Like '" + periodIdentifier +
-                "' And ItemName like '%" + searchText + "%'";
+        String periodicItemsQuery = "Select * from (" +
+                "select * from 'Categorizer' where PeriodIdentifier Like '" + periodIdentifier +
+                "' And ItemName like '%" + searchText + "%' ) as firstSet "
+                + " left join " +
+                " ( select * from Scheduler ) as secondSet " +
+                "on firstSet.Id=secondSet.CategoryId";
         Cursor cursor = sqLiteDatabase.rawQuery(periodicItemsQuery, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -470,6 +480,9 @@ DatabaseConnector extends SQLiteOpenHelper {
             periodicCategoryItem.setFavorite(cursor.getString(8).equals("true"));
             periodicCategoryItem.setItemLimiter(cursor.getFloat(10));
             periodicCategoryItem.setIcon(cursor.getString(11));
+            periodicCategoryItem.setScheduleDate(cursor.getString(12));
+            periodicCategoryItem.setScheduleType(cursor.getString(14));
+            periodicCategoryItem.setPeriodIdentifier(periodIdentifier);
             periodicList.add(periodicCategoryItem);
             cursor.moveToNext();
         }
@@ -665,6 +678,7 @@ DatabaseConnector extends SQLiteOpenHelper {
         expenseCv.put("MainCategory", transaction.getMainCategory());
         expenseCv.put("CategoryName", transaction.getCategoryName());
         expenseCv.put("CategoryType", transaction.getCategoryType());
+        expenseCv.put("PeriodIdentifier", transaction.getPeriodIdentifier());
         expenseCv.put("ExpenseName", transaction.getExpenseName());
         expenseCv.put("Cost", transaction.getCost());
         expenseCv.put("Date", transaction.getTransactionDate());
@@ -1270,6 +1284,43 @@ DatabaseConnector extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return active;
     }
+
+    public void addAutomaticEntryCategory(CategoryItem categoryItem, String startDate) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("CategoryId", categoryItem.getCategoryId());
+        cv.put("ScheduleType", categoryItem.getCategoryId());
+        cv.put("StartDate", startDate);
+        sqLiteDatabase.insert("Scheduler", null, cv);
+        sqLiteDatabase.close();
+    }
+
+    public void deleteAutomaticEntryCategory(String categoryId) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete("Scheduler", "CategoryId='" + categoryId + "'", null);
+        sqLiteDatabase.close();
+    }
+
+    public void putLastScheduledDate(String categoryId, String nextTransactionDate) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("StartDate", nextTransactionDate);
+        sqLiteDatabase.update("Scheduler", contentValues, "CategoryId = ?", new String[]{categoryId});
+    }
+
+    public String getLastScheduledDate(String categoryId) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        String query = "Select StartDate from Scheduler where categoryID = " + categoryId;
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToNext();
+        return cursor.getString(cursor.getColumnIndex("StartDate"));
+    }
+
+
+//    public void getScheduledDate(Transaction transaction) {
+//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+//        String query="Select Schedule"
+//    }
 
 
 //    public String extractIconName(){

@@ -30,7 +30,7 @@ public class CategoryItem implements Parcelable {
     private float cost;
     private float categoryLimiter, itemLimiter;
     private boolean favorite, inSelectedMode, schedule;
-    private String scheduleType;
+    private String scheduleType, scheduleDate;
     private Refresher refresher, appRefresher;
 
 
@@ -96,6 +96,7 @@ public class CategoryItem implements Parcelable {
         categoryLimiter = in.readFloat();
         itemLimiter = in.readFloat();
         scheduleType = in.readString();
+        scheduleDate = in.readString();
         boolean[] bools = {favorite, inSelectedMode, schedule};
         in.readBooleanArray(bools);
     }
@@ -132,6 +133,7 @@ public class CategoryItem implements Parcelable {
         dest.writeFloat(categoryLimiter);
         dest.writeFloat(itemLimiter);
         dest.writeString(scheduleType);
+        dest.writeString(scheduleDate);
         boolean[] bools = {favorite, inSelectedMode, schedule};
         dest.writeBooleanArray(bools);
     }
@@ -390,7 +392,12 @@ public class CategoryItem implements Parcelable {
     }
 
     public void setScheduleType(String scheduleType) {
+
         this.scheduleType = scheduleType;
+        if (scheduleType != null) {
+            if (!scheduleType.isEmpty())
+                setSchedule(true);
+        }
     }
 
     @NonNull
@@ -416,5 +423,13 @@ public class CategoryItem implements Parcelable {
 
     public String getDirection() {
         return direction;
+    }
+
+    public String getScheduleDate() {
+        return scheduleDate;
+    }
+
+    public void setScheduleDate(String scheduleDate) {
+        this.scheduleDate = scheduleDate;
     }
 }

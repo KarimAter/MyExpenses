@@ -21,10 +21,13 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -46,15 +49,16 @@ import java.util.Calendar;
 public class SpecialFragment extends Fragment {
 
     CategoryItem categoryItem;
-    Button specialUpdateBu, specialDayPickerBu, specialTimePickerBu, repeatPeriodicBu;
+    Button specialUpdateBu, specialDayPickerBu, specialTimePickerBu;
     TextInputLayout specialNoteTil, specialNewCostTil;
     TextInputEditText specialNoteEt, specialNewCostEt;
     TextView specialItemTv;
     Calendar date, scheduledDate;
     View view;
+    Switch automaticEntrySw;
     FragmentActivity activity;
     private String startDate;
-    private boolean automaticEntry;
+    private int automaticEntry;
 
     public static SpecialFragment newInstance(CategoryItem categoryItem) {
         Bundle args = new Bundle();
@@ -66,15 +70,10 @@ public class SpecialFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        activity = getActivity();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categoryItem = getArguments().getParcelable("Item");
+        activity = getActivity();
     }
 
     @Nullable
@@ -99,38 +98,64 @@ public class SpecialFragment extends Fragment {
             }
         });
 
-        repeatPeriodicBu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (categoryItem.getCategoryType().equalsIgnoreCase("Periodic")) {
-                    scheduledDate = showPickers();
-                    //Todo: add to scheduler table in database
-                    automaticEntry = true;
-                } else
-                    Toast.makeText(activity, "Fixed categories cannot bet automatically entered", Toast.LENGTH_LONG).show();
-            }
-        });
 
+        if (!categoryItem.getCategoryType().equalsIgnoreCase("Periodic")) {
+            automaticEntrySw.setClickable(false);
+            //Todo-Toast here
+
+//            Toast.makeText(activity, "Fixed categories cannot bet automatically entered", Toast.LENGTH_LONG).show();
+        } else {
+            if (categoryItem.isSchedule())
+                automaticEntrySw.setChecked(true);
+            automaticEntrySw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        scheduledDate = showPickers();
+                        automaticEntry = 1;
+                    } else automaticEntry = 2;
+                }
+            });
+        }
 
         specialUpdateBu.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if (automaticEntry)
-                    Utils.setRecurringAlarm(activity, new Transaction(categoryItem), scheduledDate);
-                    //Todo: Snack here
-                else {
-                    getCost();
-                    String dateString = MyCalendar.convertCalendarToString(date, MyCalendar.databaseDateFormat);
-                    String specialNoteStr = specialNoteEt.getText().toString();
-                    Transaction transaction = new Transaction(categoryItem);
-                    transaction.setTransactionDate(dateString);
-                    transaction.setTransactionNote(specialNoteStr);
-                    transaction.add(getActivity());
-                    Snacks.addTransactionSnackBar(getActivity(), categoryItem.getCategoryItemText());
+                switch (automaticEntry) {
+                    case 1: {
+                        Transaction transaction = new Transaction(categoryItem);
+                        transaction.setScheduleDate(MyCalendar.convertCalendarToString(scheduledDate, MyCalendar.databaseDateFormat));
+                        DatabaseConnector databaseConnector = new DatabaseConnector(activity);
+                        databaseConnector.addAutomaticEntryCategory(categoryItem,
+                                MyCalendar.convertCalendarToString(scheduledDate, MyCalendar.databaseDateFormat));
+                        Utils.setRecurringAlarm(activity, transaction);
+                        Snacks.automaticPeriodicCategorySnackBar(transaction);
+                    }
+                    break;
+                    case 2:
+                        Log.d("AutomaticTransaction", "Special: stopped from here ");
+                        Utils.stopRecurringAlarms(activity, new Transaction(categoryItem));
+                        categoryItem.setSchedule(false);
+                        DatabaseConnector databaseConnector = new DatabaseConnector(activity);
+                        databaseConnector.deleteAutomaticEntryCategory(categoryItem.getCategoryId());
+                        Snacks.cancelAutomaticPeriodicCategorySnackBar(new Transaction(categoryItem));
+                        break;
+                    default: {
+                        getCost();
+                        String dateString = MyCalendar.convertCalendarToString(date, MyCalendar.databaseDateFormat);
+                        String specialNoteStr = specialNoteEt.getText().toString();
+                        Transaction transaction = new Transaction(categoryItem);
+                        transaction.setTransactionDate(dateString);
+                        transaction.setTransactionNote(specialNoteStr);
+                        transaction.add(getActivity());
+                        Snacks.addTransactionSnackBar(getActivity(), categoryItem.getCategoryItemText());
+                        activity.getSupportFragmentManager().popBackStackImmediate();
+                    }
+                    break;
+
                 }
                 activity.getSupportFragmentManager().popBackStackImmediate();
-//                dismiss();
             }
         });
 
@@ -156,7 +181,11 @@ public class SpecialFragment extends Fragment {
         specialUpdateBu = view.findViewById(R.id.specialUpdateBu);
         specialDayPickerBu = view.findViewById(R.id.specialDayPickerBu);
         specialTimePickerBu = view.findViewById(R.id.specialTimePickerBu);
-        repeatPeriodicBu = view.findViewById(R.id.repeatPeriodicBu);
+        automaticEntrySw = view.findViewById(R.id.automaticEntrySw);
+//        repeatPeriodicBu = view.findViewById(R.id.repeatPeriodicBu);
+//        stopPeriodicBu = view.findViewById(R.id.stopPeriodicBu);
+//        if (categoryItem.isSchedule())
+//            stopPeriodicBu.setVisibility(View.VISIBLE);
     }
 
     private void showDayPicker() {

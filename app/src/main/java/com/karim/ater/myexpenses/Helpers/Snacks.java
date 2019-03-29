@@ -1,8 +1,11 @@
 package com.karim.ater.myexpenses.Helpers;
 
 import android.app.Activity;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.view.ActionMode;
+
 import android.util.Log;
 
 import android.view.View;
@@ -108,7 +111,7 @@ public class Snacks {
             public void onDismissed(Snackbar snackbar, int event) {
                 AppController.setSnackBarOn(false);
                 // to clear selected items if no other snack is shown or no other items are long clicked
-                if (event != Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE  &&
+                if (event != Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE &&
                         (event != Snackbar.Callback.DISMISS_EVENT_MANUAL)) {
                     AppController.clearSelectedItemsInActionMode();
                     Log.d("Clear", "SnackonDismissed: ");
@@ -148,7 +151,7 @@ public class Snacks {
             public void onDismissed(Snackbar snackbar, int event) {
                 AppController.setSnackBarOn(false);
                 // to clear selected items if no other snack is shown or no other items are long clicked
-                if (event != Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE  &&
+                if (event != Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE &&
                         (event != Snackbar.Callback.DISMISS_EVENT_MANUAL)) {
                     AppController.clearSelectedItemsInActionMode();
                     Log.d("Clear", "SnackonDismissed: ");
@@ -220,7 +223,16 @@ public class Snacks {
 
     }
 
+    // Todo: check long text in snack
+    public static void automaticPeriodicCategorySnackBar(Transaction transaction) {
+        Snacks.snackingMethod(transaction.getCategoryItemText() + " will be" +
+                        transaction.getPeriodIdentifier(),
+                " automatically entered starting from " + transaction.getScheduleDate());
+    }
 
+    public static void cancelAutomaticPeriodicCategorySnackBar(Transaction transaction) {
+        Snacks.snackingMethod(transaction.getCategoryItemText(), " automatic entering is stopped");
+    }
 }
 //        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams();
 //        params.setMargins(0, 0, 0, MainActivity.bottomNavigationView.getHeight());

@@ -2,6 +2,7 @@ package com.karim.ater.myexpenses.Fragments;
 
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,10 +10,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.karim.ater.myexpenses.Helpers.Utils;
@@ -32,7 +35,7 @@ public class StatsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity=getActivity();
+        activity = getActivity();
     }
 
     @Override
@@ -96,6 +99,8 @@ public class StatsFragment extends Fragment {
                             break;
                     }
                     if (fragment != null) {
+                        FrameLayout frame = activity.findViewById(R.id.frame);
+                        frame.removeAllViews();
                         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.frame, fragment).commit();
                         if (fragment instanceof CalendarStatsFragment)

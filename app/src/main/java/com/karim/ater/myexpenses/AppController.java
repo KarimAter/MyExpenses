@@ -22,6 +22,7 @@ import com.karim.ater.myexpenses.Helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Ater on 8/1/2018.
@@ -60,6 +61,8 @@ public class AppController extends Application implements Refresher {
     private static Snackbar snackbar;
     private static int feedsCurrentFragment;
     public static boolean reOrderActionEnabled;
+    public static HashMap<String, String> AutomaticLastTransactionDateMap;
+
 
     public static void setCurrentFragment(Fragment currentFragment) {
         AppController.currentFragment = currentFragment;
@@ -83,11 +86,12 @@ public class AppController extends Application implements Refresher {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        context = getApplicationContext();
         databaseValidation();
         adjustProfilesAccounts();
-        context = getApplicationContext();
         selectionItemsInActionMode = new ArrayList<>();
         selectionFeedsInActionMode = new ArrayList<>();
+        AutomaticLastTransactionDateMap = new HashMap<>();
 //
         getFixedCategories();
 

@@ -67,14 +67,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/specialNewCostTil" />
 
-    <Button
-        android:id="@+id/repeatPeriodicBu"
+    <Switch
+        android:id="@+id/automaticEntrySw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="8dp"
-        android:text="Automatic Enter"
+        android:checked="false"
+        android:text="Repeat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/specialNoteTil" />
@@ -84,12 +85,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="308dp"
         android:layout_marginEnd="8dp"
         android:text="Done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatPeriodicBu" />
+        app:layout_constraintTop_toBottomOf="@+id/specialNoteTil" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

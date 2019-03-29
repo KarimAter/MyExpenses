@@ -7,7 +7,6 @@ import android.os.Build;
 
 import android.util.Log;
 
-import com.karim.ater.myexpenses.Helpers.CategoryItem;
 import com.karim.ater.myexpenses.Helpers.DatabaseConnector;
 import com.karim.ater.myexpenses.Helpers.MyCalendar;
 import com.karim.ater.myexpenses.Helpers.Notifications;
@@ -43,12 +42,16 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Transaction transaction = ParcelableUtil.unmarshall(bytes, Transaction.CREATOR);
 
                 Log.d("AutomaticTransaction", "onReceive: Alarm with CategoryId: " + transaction.getCategoryId() +
-                        " and transactionDate: " + transaction.getTransactionDate() + " is received..");
+                        " and transactionDate: " + transaction.getScheduleDate() + " is received..");
+                transaction.setTransactionDate(transaction.getScheduleDate());
                 databaseConnector.addExpense(transaction);
-                String nextTransactionDate = MyCalendar.addPeriodToCalendar(transaction.getTransactionDate(),
+
+                String nextScheduledDate = MyCalendar.addPeriodToCalendar(transaction.getScheduleDate(),
                         transaction.getPeriodIdentifier());
-                Utils.setRecurringAlarm(context, transaction,
-                        MyCalendar.convertStringToCalendar(nextTransactionDate, MyCalendar.databaseDateFormat));
+                transaction.setScheduleDate(nextScheduledDate);
+                databaseConnector.putLastScheduledDate(transaction.getCategoryId(), nextScheduledDate);
+
+                Utils.setRecurringAlarm(context, transaction);
                 break;
         }
 
